@@ -24,6 +24,7 @@ source check.sh
 source interaction.sh
 fncGetInteraction
 source pkg.sh
+source config.sh
 source internal.sh
 source external.sh
 
@@ -36,10 +37,13 @@ case "$_VPN_SERVICE" in
 		fncSetupInternal
 		fncSetupExternalShadowsocks		
     ;;
-
   "v2ray+vmess")
 		fncSetupInternal
 		fncSetupExternalV2rayVmess
+    ;;
+  "v2ray+vmess+ws")
+		fncSetupInternal
+		fncSetupExternalV2rayVmessWs
     ;;
 esac
 

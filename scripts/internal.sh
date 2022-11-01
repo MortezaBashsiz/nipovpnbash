@@ -19,46 +19,6 @@
 
 set -o nounset                                  # Treat unset variables as an error
 
-_INTERNAL_IPTABLES_CFG=$(cat << EOF
-*filter
-:INPUT ACCEPT [0:0]
-:FORWARD DROP [0:0]
-:OUTPUT ACCEPT [0:0]
--A INPUT -d $_INTERNAL_IP/32 -p udp -m udp --dport $_INTERNAL_VPN_PORT -j ACCEPT
--A INPUT -d $_INTERNAL_IP/32 -p tcp -m tcp --dport $_INTERNAL_VPN_PORT -j ACCEPT
--A INPUT -p tcp -m tcp --dport $_INTERNAL_SSH_PORT -j ACCEPT
--A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
--A INPUT -i lo -j ACCEPT
--A INPUT -p icmp -j ACCEPT
--A INPUT -j DROP
--A FORWARD -d $_EXTERNAL_IP/32 -j ACCEPT
--A FORWARD -s $_EXTERNAL_IP/32 -j ACCEPT
--A FORWARD -j DROP
--A OUTPUT -j ACCEPT
-COMMIT
-*nat
-:PREROUTING ACCEPT [0:0]
-:INPUT ACCEPT [0:0]
-:OUTPUT ACCEPT [0:0]
-:POSTROUTING ACCEPT [0:0]
--A PREROUTING -d $_INTERNAL_IP/32 -p udp -m udp --dport $_INTERNAL_VPN_PORT -j DNAT --to-destination $_EXTERNAL_IP:$_EXTERNAL_VPN_PORT 
--A PREROUTING -d $_INTERNAL_IP/32 -p tcp -m tcp --dport $_INTERNAL_VPN_PORT -j DNAT --to-destination $_EXTERNAL_IP:$_EXTERNAL_VPN_PORT
--A POSTROUTING -j MASQUERADE
-COMMIT
-EOF
-)
-
-_FAIL2BAN_CFG=$(cat << EOF
-[sshd]
-enabled = true
-bantime = 15m
-findtime = 10m
-maxretry = 3
-EOF
-)
-
-_SYSCTL_CFG="net.ipv4.ip_forward = 1"
-
 # Function fncSetupInternal
 # Setup external host
 function fncSetupInternal {

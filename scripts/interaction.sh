@@ -30,6 +30,7 @@ _EXTERNAL_VPN_PORT="443"
 _VPN_SERVICE_LIST=(
 									"shadowsocks+obfs"
 									"v2ray+vmess"
+									"v2ray+vmess+ws"
 									)
 _VPN_SERVICE="NULL"
 

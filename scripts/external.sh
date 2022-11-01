@@ -19,82 +19,6 @@
 
 set -o nounset                                  # Treat unset variables as an error
 
-_pass=$(< /dev/urandom tr -dc A-Z-a-z-0-9 | head -c"${1:-16}";echo;)
-_uuid=$(cat /proc/sys/kernel/random/uuid)
-_SHADOWSOCKS_CFG=$(cat << EOF
-{
-    "server":"$_EXTERNAL_IP",
-    "server_port":$_EXTERNAL_VPN_PORT,
-    "local_port":1080,
-    "password":"$_pass",
-    "timeout":300,
-    "method":"chacha20-ietf-poly1305",
-    "workers":8,
-    "plugin":"obfs-server",
-    "plugin_opts": "obfs=http;obfs-host=www.google.com",
-    "fast_open":true,
-    "reuse_port":true
-}
-EOF
-)
-
-
-_V2RAY_VMESS_CFG=$(cat << EOF
-{
-  "inbounds": [{
-    "listen": "$_EXTERNAL_IP",
-    "port": $_EXTERNAL_VPN_PORT,
-    "protocol": "vmess",
-    "streamSettings": {},
-    "settings": {
-      "clients": [
-        {
-          "id": "$_uuid",
-          "level": 1,
-          "alterId": 64
-        }
-      ]
-    }
-  }],
-  "outbounds": [{
-    "protocol": "freedom",
-    "settings": {}
-  },{
-    "protocol": "blackhole",
-    "settings": {},
-    "tag": "blocked"
-  }]
-}
-EOF
-)
-
-_EXTERNAL_IPTABLES_CFG=$(cat << EOF
-*filter
-:INPUT ACCEPT [0:0]
-:FORWARD DROP [0:0]
-:OUTPUT ACCEPT [0:0]
--A INPUT -d $_EXTERNAL_IP/32 -p udp -m udp --dport $_EXTERNAL_VPN_PORT -j ACCEPT
--A INPUT -d $_EXTERNAL_IP/32 -p tcp -m tcp --dport $_EXTERNAL_VPN_PORT -j ACCEPT
--A INPUT -p tcp -m tcp --dport $_EXTERNAL_SSH_PORT -j ACCEPT
--A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
--A INPUT -i lo -j ACCEPT
--A INPUT -p icmp -j ACCEPT
--A INPUT -j DROP
--A FORWARD -j DROP
--A OUTPUT -j ACCEPT
-COMMIT
-EOF
-)
-
-_FAIL2BAN_CFG=$(cat << EOF
-[sshd]
-enabled = true
-bantime = 15m
-findtime = 10m
-maxretry = 3
-EOF
-)
-
 # Function fncSetupExternalCommon
 # Setup external host 
 function fncSetupExternalCommon {
@@ -134,7 +58,6 @@ function fncSetupExternalShadowsocks {
 # Function fncSetupExternalV2rayVmess
 # Setup external host with V2rayVmess
 function fncSetupExternalV2rayVmess {
-	fncSetupExternalCommon
 	echo "${_V2RAY_VMESS_CFG}" > /tmp/external_v2rayvmess
 	scp -r -P "$_EXTERNAL_SSH_PORT" /tmp/external_v2rayvmess "$_EXTERNAL_IP":/root/
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "mv /root/external_v2rayvmess /etc/v2ray/config.json"
@@ -147,3 +70,24 @@ function fncSetupExternalV2rayVmess {
 	echo "$_vmessurl"
 }
 # End of Function fncSetupExternalV2rayVmess
+
+# Function fncSetupExternalV2rayVmessWs
+# Setup external host with V2ray Vmess WS
+function fncSetupExternalV2rayVmessWs {
+	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj \"/C=IR/ST=Sudoer/L=Springfield/O=Dis/CN=www.sudoer.net\"  -keyout /etc/v2ray/v2ray.key  -out /etc/v2ray/v2ray.crt"
+	echo "${_V2RAY_VMESS_WS_CFG}" > /tmp/external_v2rayvmessws
+	scp -r -P "$_EXTERNAL_SSH_PORT" /tmp/external_v2rayvmessws "$_EXTERNAL_IP":/root/
+	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "mv /root/external_v2rayvmessws /etc/v2ray/config.json"
+	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "systemctl restart v2ray.service; systemctl enable v2ray.service;"
+	echo "${_V2RAY_VMESS_WS_NGINX_CFG}" > /tmp/external_v2rayvmesswsnginx
+	scp -r -P "$_EXTERNAL_SSH_PORT" /tmp/external_v2rayvmesswsnginx "$_EXTERNAL_IP":/root/
+	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "mv /root/external_v2rayvmesswsnginx /etc/nginx/conf.d/vmess.conf"
+	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "systemctl restart nginx.service; systemctl enable nginx.service;"
+	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "python3 /opt/tools/conf2vmess.py -c /etc/v2ray/config.json -s $_INTERNAL_IP -p $_INTERNAL_VPN_PORT -o /opt/tools/output-vmess.json"
+	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "python3 /opt/tools/vmess2sub.py /opt/tools/output-vmess.json /opt/tools/output-vmess_v2rayN.html -l /opt/tools/output-vmess_v2rayN.lnk"
+	_vmessurl=$(fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "cat /opt/tools/output-vmess_v2rayN.lnk")
+	echo ""
+	echo ">Your VMESS url is as following inport it to your client device"
+	echo "$_vmessurl"
+}
+# End of Function fncSetupExternalV2rayVmessWs
