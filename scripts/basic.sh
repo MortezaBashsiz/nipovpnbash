@@ -49,7 +49,7 @@ function fncPkgInstall {
 	local pkglist="$3"
 	fncCheckSSH "$ip" "$port"
 	echo ">Installing packages $pkglist"
-	ssh -q -o BatchMode=yes  -o StrictHostKeyChecking=no "$ip" -p "$port" "apt-get update; apt-get install -y $pkglist"
+	ssh -q -o BatchMode=yes  -o StrictHostKeyChecking=no "$ip" -p "$port" "apt-get --yes --assume-yes update; apt-get --yes --assume-yes install $pkglist"
 }
 # End of Function fncPkgInstall
 

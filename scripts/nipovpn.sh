@@ -33,13 +33,13 @@ fncSetupExternalCommon
 
 case "$_VPN_SERVICE" in
   "shadowsocks+obfs")
-		fncSetupExternalShadowsocks		
 		fncSetupInternal
+		fncSetupExternalShadowsocks		
     ;;
 
   "v2ray+vmess")
-		fncSetupExternalV2rayVmess
 		fncSetupInternal
+		fncSetupExternalV2rayVmess
     ;;
 esac
 

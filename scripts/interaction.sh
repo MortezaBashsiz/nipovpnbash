@@ -81,7 +81,7 @@ function fncGetInteraction {
 	echo ">These are the type of services which is supported by this script"
 	for item in "${_VPN_SERVICE_LIST[@]}"
 	do
-		echo "$item"
+		echo ">> $item"
 	done
 	echo ">What kind of service would you like to use?(choose from list above)"
 	read -r tmpInput
