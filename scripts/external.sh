@@ -74,7 +74,6 @@ function fncSetupExternalV2rayVmess {
 # Function fncSetupExternalV2rayVmessWs
 # Setup external host with V2ray Vmess WS
 function fncSetupExternalV2rayVmessWs {
-	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj \"/C=IR/ST=Sudoer/L=Springfield/O=Dis/CN=www.sudoer.net\"  -keyout /etc/v2ray/v2ray.key  -out /etc/v2ray/v2ray.crt"
 	echo "${_V2RAY_VMESS_WS_CFG}" > /tmp/external_v2rayvmessws
 	scp -r -P "$_EXTERNAL_SSH_PORT" /tmp/external_v2rayvmessws "$_EXTERNAL_IP":/root/
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "mv /root/external_v2rayvmessws /etc/v2ray/config.json"
