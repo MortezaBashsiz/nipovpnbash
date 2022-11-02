@@ -27,7 +27,7 @@ function fncInstallExternal {
 		fncPkgInstall "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "shadowsocks-libev simple-obfs"
 	elif [[ "$_VPN_SERVICE" == "v2ray+vmess" ]]; then
 		fncPkgInstall "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "python3-urllib3 v2ray"
-	elif [[ "$_VPN_SERVICE" == "v2ray+vmess+ws+tls" ]]; then
+	elif [[ "$_VPN_SERVICE" == "v2ray+vmess+ws" ]]; then
 		fncPkgInstall "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "python3-urllib3 v2ray nginx"
 	fi
 }
