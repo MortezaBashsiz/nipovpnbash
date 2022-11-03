@@ -46,4 +46,4 @@ Get:1 http://security.debian.org/debian-security bullseye-security InRelease [48
 Get:2 http://deb.debian.org/debian bullseye InRelease [116 kB]
 Get:3 http://deb.debian.org/debian bullseye-updates InRelease [44.1 kB]
 ```
-Video link in [youtube](https://youtu.be/rtGPtn0Fkv8 "youtube") 
+Video link in [youtube](https://youtu.be/jO-1O1BJ6rE "youtube") 
