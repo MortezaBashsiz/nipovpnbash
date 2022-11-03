@@ -22,7 +22,13 @@ set -o nounset                                  # Treat unset variables as an er
 # Function fncInstallExternal
 # Installs the packages on external host
 function fncInstallExternal {
-		fncPkgInstall "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "htop net-tools iptables-persistent vim fail2ban"
+	if [[ "$_DIST" == "UBUNTU" ]]; then
+		fncPkgInstall "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "gnupg ca-certificates curl"
+		fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "curl -sSL https://apt.v2fly.org/pubkey.gpg | sudo apt-key add -"
+		fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "echo \"deb [arch=amd64] https://apt.v2fly.org/ stable main\" | sudo tee /etc/apt/sources.list.d/v2ray.list"
+	fi
+		fncPkgInstall "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "iptables-persistent"
+		fncPkgInstall "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "htop net-tools vim fail2ban"
 	if [[ "$_VPN_SERVICE" == "shadowsocks+obfs" ]]; then
 		fncPkgInstall "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "shadowsocks-libev simple-obfs"
 	elif [[ "$_VPN_SERVICE" == "v2ray+vmess" ]]; then
@@ -36,6 +42,7 @@ function fncInstallExternal {
 # Function fncInstallInternal
 # Installs the packages on external host
 function fncInstallInternal {
-	fncPkgInstall "$_INTERNAL_IP" "$_INTERNAL_SSH_PORT" "htop net-tools iptables-persistent vim fail2ban"
+	fncPkgInstall "$_INTERNAL_IP" "$_INTERNAL_SSH_PORT" "iptables-persistent"
+	fncPkgInstall "$_INTERNAL_IP" "$_INTERNAL_SSH_PORT" "htop net-tools vim fail2ban"
 }
 # End of Function fncInstallExternal

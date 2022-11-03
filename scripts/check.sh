@@ -27,9 +27,11 @@ function fncGetDistro {
 	local tmpDist=""
 	ip="$1"
 	port="$2"
-	tmpDist=$(fncExecCmd "$ip" "$port" "grep Debian /etc/issue")
+	tmpDist=$(fncExecCmd "$ip" "$port" "cat /etc/issue")
 	if [[ "$tmpDist" == "Debian GNU/Linux 11 \\n \\l" ]]; then
 		_DIST="DEBIAN"
+	elif [[ "$tmpDist" == "Ubuntu 20.04.5 LTS \\n \\l" ]]; then
+		_DIST="UBUNTU"
 	fi
 }
 # End of Function fncGetDistro
@@ -40,8 +42,12 @@ function fncCheckDistro {
 	ip="$1"
 	port="$2"
 	fncGetDistro "$ip" "$port"
-	if [[ "$_DIST" != "DEBIAN" ]]; then
-		fncExitErr "THIS SCRIPT ONLY WORKS ON DEBIAN 11"
+	if [[ "$_DIST" == "DEBIAN" ]]; then
+		echo "> Installing for Debian"
+	elif [[ "$_DIST" == "UBUNTU" ]]; then
+		echo "> Installing for Ubuntu"
+	else
+		fncExitErr "THIS SCRIPT ONLY WORKS ON DEBIAN 11 or UBUNTU 20.04"
 	fi
 }
 # End of Function fncGetDistro
