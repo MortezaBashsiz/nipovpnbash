@@ -35,6 +35,8 @@ function fncInstallExternal {
 		fncPkgInstall "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "python3-urllib3 v2ray"
 	elif [[ "$_VPN_SERVICE" == "v2ray+vmess+ws" ]]; then
 		fncPkgInstall "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "python3-urllib3 v2ray nginx"
+	elif [[ "$_VPN_SERVICE" == "trojan" ]]; then
+		fncPkgInstall "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "trojan"
 	fi
 }
 # End of Function fncInstallExternal

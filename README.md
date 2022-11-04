@@ -39,6 +39,7 @@ total 36
 >> shadowsocks+obfs
 >> v2ray+vmess
 >> v2ray+vmess+ws
+>> trojan
 >What kind of service would you like to use?(choose from list above)
 v2ray+vmess
 >Installing packages htop net-tools iptables-persistent vim fail2ban

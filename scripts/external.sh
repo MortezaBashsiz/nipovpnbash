@@ -90,3 +90,20 @@ function fncSetupExternalV2rayVmessWs {
 	echo "$_vmessurl"
 }
 # End of Function fncSetupExternalV2rayVmessWs
+
+# Function fncSetupExternalTrojan
+# Setup external host with Trojan
+function fncSetupExternalTrojan {
+	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj \"/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.sudoer.online\" -keyout /etc/trojan/ssl.key  -out /etc/trojan/ssl.cert"
+	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "chmod 644 /etc/trojan/ssl.*"
+	echo "${_TROJAN_CFG}" > /tmp/external_trojan
+	scp -r -P "$_EXTERNAL_SSH_PORT" /tmp/external_trojan "$_EXTERNAL_IP":/root/
+	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "mv /root/external_trojan /etc/trojan/config.json"
+	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "systemctl restart trojan.service; systemctl enable trojan.service;"
+	echo "
+ 	server: $_INTERNAL_IP
+ 	server_port: $_INTERNAL_VPN_PORT
+ 	password: $_pass
+ "
+}
+# End of Function fncSetupExternalTrojan

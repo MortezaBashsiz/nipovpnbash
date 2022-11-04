@@ -31,6 +31,7 @@ _VPN_SERVICE_LIST=(
 									"shadowsocks+obfs"
 									"v2ray+vmess"
 									"v2ray+vmess+ws"
+									"trojan"
 									)
 _VPN_SERVICE="NULL"
 

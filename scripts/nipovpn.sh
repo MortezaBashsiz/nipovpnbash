@@ -45,5 +45,9 @@ case "$_VPN_SERVICE" in
 		fncSetupInternal
 		fncSetupExternalV2rayVmessWs
     ;;
+  "trojan")
+		fncSetupInternal
+		fncSetupExternalTrojan
+    ;;
 esac
 
