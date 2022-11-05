@@ -28,9 +28,9 @@ function fncGetDistro {
 	ip="$1"
 	port="$2"
 	tmpDist=$(fncExecCmd "$ip" "$port" "cat /etc/issue")
-	if [[ "$tmpDist" == "Debian GNU/Linux 11 \\n \\l" ]]; then
+	if [[ "$tmpDist" == *"Debian"* ]]; then
 		_DIST="DEBIAN"
-	elif [[ "$tmpDist" == "Ubuntu 20.04.5 LTS \\n \\l" ]]; then
+	elif [[ "$tmpDist" == *"Ubuntu"* ]]; then
 		_DIST="UBUNTU"
 	fi
 }
