@@ -1,3 +1,20 @@
+# What is this?
+
+This is an easy installation script to help you config these VPN protocols on your VPS.
+
+    shadowsocks+obfs
+    v2ray+vmess
+    v2ray+vmess+ws
+    trojan
+
+# Requirements
+
+    an external VPS (outside Iran)
+    an internal VPS (Inside Iran)
+    Debian 11 as the OS of both VMs
+
+A video guide on the usage can be found in [youtube](https://youtu.be/jO-1O1BJ6rE "youtube").
+
 # How to Run
 1. Download or clone the project
 2. Go the the directory
