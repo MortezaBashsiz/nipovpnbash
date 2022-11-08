@@ -2,16 +2,16 @@
 
 This is an easy installation script to help you config these VPN protocols on your VPS.
 
-    shadowsocks+obfs
-    v2ray+vmess
-    v2ray+vmess+ws
-    trojan
+-     shadowsocks+obfs
+-     v2ray+vmess
+-     v2ray+vmess+ws
+-     trojan
 
 # Requirements
 
-    an external VPS (outside Iran)
-    an internal VPS (Inside Iran)
-    Debian 11 as the OS of both VMs
+1.     an external VPS (outside Iran)
+2.     an internal VPS (Inside Iran)
+3.     Debian 11 as the OS of both VMs
 
 A video guide on the usage can be found in [youtube](https://youtu.be/jO-1O1BJ6rE "youtube").
 
@@ -34,6 +34,7 @@ total 36
 ```
 
 3. Execute the nipovpn.sh and answer the questions like following
+
 ```bash
 [~/data/git/MortezaBashsiz/nipovpn/scripts]>$ bash nipovpn.sh 
 
@@ -64,4 +65,6 @@ Get:1 http://security.debian.org/debian-security bullseye-security InRelease [48
 Get:2 http://deb.debian.org/debian bullseye InRelease [116 kB]
 Get:3 http://deb.debian.org/debian bullseye-updates InRelease [44.1 kB]
 ```
+
 Video link in [youtube](https://youtu.be/jO-1O1BJ6rE "youtube") 
+
