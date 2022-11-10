@@ -97,6 +97,12 @@ _SHADOWSOCKS_CFG=$(cat << EOF
 EOF
 )
 
+_V2RAY_VMESS_SYSTEMD_CFG=$(cat << EOF
+[Service]
+Environment=V2RAY_VMESS_AEAD_FORCED=false
+EOF
+)
+
 _V2RAY_VMESS_CFG=$(cat << EOF
 {
   "inbounds": [{

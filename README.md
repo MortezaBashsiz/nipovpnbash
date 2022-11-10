@@ -11,7 +11,7 @@ This is an easy installation script to help you config these VPN protocols on yo
 
 1. an external VPS (outside Iran)
 2. an internal VPS (Inside Iran)
-3. Debian 11 as the OS of both VMs
+3. Debian 11 OR Ubuntu 20.04 as the OS of both VMs
 
 A video guide on the usage can be found in [youtube](https://youtu.be/jO-1O1BJ6rE "youtube").
 

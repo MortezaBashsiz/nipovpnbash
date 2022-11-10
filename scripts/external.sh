@@ -34,6 +34,18 @@ function fncSetupExternalCommon {
 }
 # End of Function fncSetupExternalCommon
 
+# Function fncSetupExternalV2raySystemd
+# Setup external host 
+function fncSetupExternalV2raySystemd {
+	if [[ "$_DIST" == "UBUNTU" ]]; then
+		echo "${_V2RAY_VMESS_SYSTEMD_CFG}" > /tmp/external_v2rayvmess_systemd
+		scp -r -P "$_EXTERNAL_SSH_PORT" /tmp/external_v2rayvmess_systemd "$_EXTERNAL_IP":/root/
+		fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "mkdir -p /etc/systemd/system/v2ray.service.d"
+		fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "mv /root/external_v2rayvmess_systemd /etc/systemd/system/v2ray.service.d/v2ray.conf"
+	fi
+}
+# End of Function fncSetupExternalV2raySystemd
+
 # Function fncSetupExternalShadowsocks
 # Setup external host with Shadowsocks
 function fncSetupExternalShadowsocks {
@@ -58,10 +70,11 @@ function fncSetupExternalShadowsocks {
 # Function fncSetupExternalV2rayVmess
 # Setup external host with V2rayVmess
 function fncSetupExternalV2rayVmess {
+	fncSetupExternalV2raySystemd
 	echo "${_V2RAY_VMESS_CFG}" > /tmp/external_v2rayvmess
 	scp -r -P "$_EXTERNAL_SSH_PORT" /tmp/external_v2rayvmess "$_EXTERNAL_IP":/root/
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "mv /root/external_v2rayvmess /etc/v2ray/config.json"
-	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "systemctl restart v2ray.service; systemctl enable v2ray.service;"
+	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "systemctl daemon-reload; systemctl restart v2ray.service; systemctl enable v2ray.service;"
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "python3 /opt/tools/conf2vmess.py -c /etc/v2ray/config.json -s $_INTERNAL_IP -p $_INTERNAL_VPN_PORT -o /opt/tools/output-vmess.json"
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "python3 /opt/tools/vmess2sub.py /opt/tools/output-vmess.json /opt/tools/output-vmess_v2rayN.html -l /opt/tools/output-vmess_v2rayN.lnk"
 	_vmessurl=$(fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "cat /opt/tools/output-vmess_v2rayN.lnk")
@@ -74,10 +87,11 @@ function fncSetupExternalV2rayVmess {
 # Function fncSetupExternalV2rayVmessWs
 # Setup external host with V2ray Vmess WS
 function fncSetupExternalV2rayVmessWs {
+	fncSetupExternalV2raySystemd
 	echo "${_V2RAY_VMESS_WS_CFG}" > /tmp/external_v2rayvmessws
 	scp -r -P "$_EXTERNAL_SSH_PORT" /tmp/external_v2rayvmessws "$_EXTERNAL_IP":/root/
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "mv /root/external_v2rayvmessws /etc/v2ray/config.json"
-	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "systemctl restart v2ray.service; systemctl enable v2ray.service;"
+	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "systemctl daemon-reload; systemctl restart v2ray.service; systemctl enable v2ray.service;"
 	echo "${_V2RAY_VMESS_WS_NGINX_CFG}" > /tmp/external_v2rayvmesswsnginx
 	scp -r -P "$_EXTERNAL_SSH_PORT" /tmp/external_v2rayvmesswsnginx "$_EXTERNAL_IP":/root/
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "mv /root/external_v2rayvmesswsnginx /etc/nginx/conf.d/vmess.conf"
