@@ -49,6 +49,15 @@ function fncSetupExternalV2raySystemd {
 # Function fncSetupExternalShadowsocks
 # Setup external host with Shadowsocks
 function fncSetupExternalShadowsocks {
+	tempHost="NULL"
+	tempPort="NULL"
+	if [[ "$_BOTH_OR_EXTERNAL" == "external" ]]; then
+		tempHost="$_EXTERNAL_IP"
+		tempPort="$_EXTERNAL_VPN_PORT"
+	elif [[ "$_BOTH_OR_EXTERNAL" == "both" ]]; then
+		tempHost="$_INTERNAL_IP"
+		tempPort="$_INTERNAL_VPN_PORT"
+	fi
 	fncSetupExternalCommon
 	echo "${_SHADOWSOCKS_CFG}" > /tmp/external_shadowsocks
 	scp -r -P "$_EXTERNAL_SSH_PORT" /tmp/external_shadowsocks "$_EXTERNAL_IP":/root/
@@ -58,8 +67,8 @@ function fncSetupExternalShadowsocks {
 	echo ">External Host is configured"
 	echo ">use the following configuration for your android client"
 	echo "
-		server: $_INTERNAL_IP
-		server_port: $_INTERNAL_VPN_PORT
+		server: $tempHost
+		server_port: $tempPort
 		password: $_pass
 		method: chacha20-ietf-poly1305
 		plugin_opts: obfs=http;obfs-host=www.google.com
@@ -70,12 +79,21 @@ function fncSetupExternalShadowsocks {
 # Function fncSetupExternalV2rayVmess
 # Setup external host with V2rayVmess
 function fncSetupExternalV2rayVmess {
+	tempHost="NULL"
+	tempPort="NULL"
+	if [[ "$_BOTH_OR_EXTERNAL" == "external" ]]; then
+		tempHost="$_EXTERNAL_IP"
+		tempPort="$_EXTERNAL_VPN_PORT"
+	elif [[ "$_BOTH_OR_EXTERNAL" == "both" ]]; then
+		tempHost="$_INTERNAL_IP"
+		tempPort="$_INTERNAL_VPN_PORT"
+	fi
 	fncSetupExternalV2raySystemd
 	echo "${_V2RAY_VMESS_CFG}" > /tmp/external_v2rayvmess
 	scp -r -P "$_EXTERNAL_SSH_PORT" /tmp/external_v2rayvmess "$_EXTERNAL_IP":/root/
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "mv /root/external_v2rayvmess /etc/v2ray/config.json"
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "systemctl daemon-reload; systemctl restart v2ray.service; systemctl enable v2ray.service;"
-	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "python3 /opt/tools/conf2vmess.py -c /etc/v2ray/config.json -s $_INTERNAL_IP -p $_INTERNAL_VPN_PORT -o /opt/tools/output-vmess.json"
+	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "python3 /opt/tools/conf2vmess.py -c /etc/v2ray/config.json -s $tempHost -p $tempPort -o /opt/tools/output-vmess.json"
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "python3 /opt/tools/vmess2sub.py /opt/tools/output-vmess.json /opt/tools/output-vmess_v2rayN.html -l /opt/tools/output-vmess_v2rayN.lnk"
 	_vmessurl=$(fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "cat /opt/tools/output-vmess_v2rayN.lnk")
 	echo ""
@@ -87,6 +105,15 @@ function fncSetupExternalV2rayVmess {
 # Function fncSetupExternalV2rayVmessWs
 # Setup external host with V2ray Vmess WS
 function fncSetupExternalV2rayVmessWs {
+	tempHost="NULL"
+	tempPort="NULL"
+	if [[ "$_BOTH_OR_EXTERNAL" == "external" ]]; then
+		tempHost="$_EXTERNAL_IP"
+		tempPort="$_EXTERNAL_VPN_PORT"
+	elif [[ "$_BOTH_OR_EXTERNAL" == "both" ]]; then
+		tempHost="$_INTERNAL_IP"
+		tempPort="$_INTERNAL_VPN_PORT"
+	fi
 	fncSetupExternalV2raySystemd
 	echo "${_V2RAY_VMESS_WS_CFG}" > /tmp/external_v2rayvmessws
 	scp -r -P "$_EXTERNAL_SSH_PORT" /tmp/external_v2rayvmessws "$_EXTERNAL_IP":/root/
@@ -96,7 +123,7 @@ function fncSetupExternalV2rayVmessWs {
 	scp -r -P "$_EXTERNAL_SSH_PORT" /tmp/external_v2rayvmesswsnginx "$_EXTERNAL_IP":/root/
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "mv /root/external_v2rayvmesswsnginx /etc/nginx/conf.d/vmess.conf"
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "systemctl restart nginx.service; systemctl enable nginx.service;"
-	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "python3 /opt/tools/conf2vmess.py -c /etc/v2ray/config.json -s $_INTERNAL_IP -p $_INTERNAL_VPN_PORT -o /opt/tools/output-vmess.json"
+	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "python3 /opt/tools/conf2vmess.py -c /etc/v2ray/config.json -s $tempHost -p $tempPort -o /opt/tools/output-vmess.json"
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "python3 /opt/tools/vmess2sub.py /opt/tools/output-vmess.json /opt/tools/output-vmess_v2rayN.html -l /opt/tools/output-vmess_v2rayN.lnk"
 	_vmessurl=$(fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "cat /opt/tools/output-vmess_v2rayN.lnk")
 	echo ""
@@ -108,6 +135,15 @@ function fncSetupExternalV2rayVmessWs {
 # Function fncSetupExternalTrojan
 # Setup external host with Trojan
 function fncSetupExternalTrojan {
+	tempHost="NULL"
+	tempPort="NULL"
+	if [[ "$_BOTH_OR_EXTERNAL" == "external" ]]; then
+		tempHost="$_EXTERNAL_IP"
+		tempPort="$_EXTERNAL_VPN_PORT"
+	elif [[ "$_BOTH_OR_EXTERNAL" == "both" ]]; then
+		tempHost="$_INTERNAL_IP"
+		tempPort="$_INTERNAL_VPN_PORT"
+	fi
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj \"/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.sudoer.online\" -keyout /etc/trojan/ssl.key  -out /etc/trojan/ssl.cert"
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "chmod 644 /etc/trojan/ssl.*"
 	echo "${_TROJAN_CFG}" > /tmp/external_trojan
@@ -115,8 +151,8 @@ function fncSetupExternalTrojan {
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "mv /root/external_trojan /etc/trojan/config.json"
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "systemctl restart trojan.service; systemctl enable trojan.service;"
 	echo "
- 	server: $_INTERNAL_IP
- 	server_port: $_INTERNAL_VPN_PORT
+ 	server: $tempHost
+ 	server_port: $tempPort
  	password: $_pass
  "
 }

@@ -28,25 +28,28 @@ source config.sh
 source internal.sh
 source external.sh
 
-fncInstallInternal
+if [[ "$_BOTH_OR_EXTERNAL" == "external" ]]; then
+	echo ""
+	echo "Script is running only for external server"
+	echo ""
+else
+	fncInstallInternal
+	fncSetupInternal
+fi
 fncInstallExternal
 fncSetupExternalCommon
 
 case "$_VPN_SERVICE" in
   "shadowsocks+obfs")
-		fncSetupInternal
 		fncSetupExternalShadowsocks		
     ;;
   "v2ray+vmess")
-		fncSetupInternal
 		fncSetupExternalV2rayVmess
     ;;
   "v2ray+vmess+ws")
-		fncSetupInternal
 		fncSetupExternalV2rayVmessWs
     ;;
   "trojan")
-		fncSetupInternal
 		fncSetupExternalTrojan
     ;;
 esac

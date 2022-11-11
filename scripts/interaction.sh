@@ -19,6 +19,8 @@
 
 set -o nounset                                  # Treat unset variables as an error
 
+_BOTH_OR_EXTERNAL="both"
+
 _INTERNAL_IP="NULL"
 _INTERNAL_SSH_PORT="22"
 _INTERNAL_VPN_PORT="443"
@@ -41,24 +43,39 @@ function fncGetInteraction {
 	echo ""
 	echo ">Welcome to nipovpn "
 	echo ">Please answer to the following questions "
-	echo ">Internal server IP address IP.IP.IP.IP"
+	echo ">This script by default uses for setting up internal and external servers "
+	echo ">How do you want to use this script? "
+	echo ">Please choose from following or leave empty and push enter button for continue "
+	echo ">> external"
+	echo ">> both"
 	read -r tmpInput
 	if [[ "$tmpInput" ]]; then
-		_INTERNAL_IP="$tmpInput"
-	else
-		fncExitErr "internal server IP can not be empty"
+		if [[ "$tmpInput" == "external" ]] || [[ "$tmpInput" == "both" ]]; then
+			_BOTH_OR_EXTERNAL="$tmpInput"
+		else
+			fncExitErr "variable should be one of these values (both, external) "
+		fi
 	fi
-	echo ">SSH port for internal server $_INTERNAL_IP (default 22)"
-	read -r tmpInput
-	if [[ "$tmpInput" ]]; then
-		_INTERNAL_SSH_PORT=$tmpInput
-	fi
-	fncCheckSSH "$_INTERNAL_IP" "$_INTERNAL_SSH_PORT"
-	fncCheckDistro "$_INTERNAL_IP" "$_INTERNAL_SSH_PORT"
-	echo ">Internal server port (default 443)"
-	read -r tmpInput
-	if [[ "$tmpInput" ]]; then
-		_INTERNAL_VPN_PORT=$tmpInput
+	if [[ "$_BOTH_OR_EXTERNAL" == "both" ]]; then
+		echo ">Internal server IP address IP.IP.IP.IP"
+		read -r tmpInput
+		if [[ "$tmpInput" ]]; then
+			_INTERNAL_IP="$tmpInput"
+		else
+			fncExitErr "internal server IP can not be empty"
+		fi
+		echo ">SSH port for internal server $_INTERNAL_IP (default 22)"
+		read -r tmpInput
+		if [[ "$tmpInput" ]]; then
+			_INTERNAL_SSH_PORT=$tmpInput
+		fi
+		fncCheckSSH "$_INTERNAL_IP" "$_INTERNAL_SSH_PORT"
+		fncCheckDistro "$_INTERNAL_IP" "$_INTERNAL_SSH_PORT"
+		echo ">Internal server port (default 443)"
+		read -r tmpInput
+		if [[ "$tmpInput" ]]; then
+			_INTERNAL_VPN_PORT=$tmpInput
+		fi
 	fi
 	echo ">External server IP address IP.IP.IP.IP"
 	read -r tmpInput
@@ -87,10 +104,14 @@ function fncGetInteraction {
 	done
 	echo ">What kind of service would you like to use?(choose from list above)"
 	read -r tmpInput
-	if [[ "${_VPN_SERVICE_LIST[*]}" =~ "$tmpInput" ]]; then
-		_VPN_SERVICE="$tmpInput"
+	if [[ "$tmpInput" ]]; then
+		if [[ "${_VPN_SERVICE_LIST[*]}" =~ "$tmpInput" ]]; then
+			_VPN_SERVICE="$tmpInput"
+		else
+			fncExitErr "Selected service is not correct $tmpInput"
+		fi
 	else
-		fncExitErr "Selected service is not correct $tmpInput"
+		fncExitErr "Selected service is empty"
 	fi
 }
 # End of Function fncGetInteraction

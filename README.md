@@ -10,7 +10,7 @@ This is an easy installation script to help you config these VPN protocols on yo
 # Requirements
 
 1. an external VPS (outside Iran)
-2. an internal VPS (Inside Iran)
+2. an internal VPS (Inside Iran) This is optional and you can use it for only external
 3. Debian 11 OR Ubuntu 20.04 as the OS of both VMs
 
 A video guide on the usage can be found in [youtube](https://youtu.be/jO-1O1BJ6rE "youtube").
@@ -39,6 +39,13 @@ total 36
 [~/data/git/MortezaBashsiz/nipovpn/scripts]>$ bash nipovpn.sh 
 
 >Welcome to nipovpn 
+>Please answer to the following questions 
+>This script by default uses for setting up internal and external servers 
+>How do you want to use this script? 
+>Please choose from following or leave empty and push enter button for continue 
+>> external
+>> both
+both
 >Please answer to the following questions 
 >Internal server IP address IP.IP.IP.IP
 65.21.189.183
