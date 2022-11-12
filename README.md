@@ -12,6 +12,24 @@ This is an easy installation script to help you config these VPN protocols on yo
 1. an external VPS (outside Iran)
 2. an internal VPS (Inside Iran) This is optional and you can use it for only external
 3. Debian 11 OR Ubuntu 20.04 as the OS of both VMs
+4. Able to SSH without password to both internal and external server
+
+# How to setup ssh key on client
+
+Your client (where the script will be executed), must be able to ssh without password and with ssh-key.
+To do this, you need to create ssh key if you do not have in your client. With following command you can create ssh-key in your client
+
+```bash
+[~]>$ ssh-keygen
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/morteza/.ssh/id_rsa):
+.........
+```
+
+Then you need to copy the generated ssh key to the destination hosts with the following command 
+```bash
+[~]>$ ssh-copy-id root@192.168.5.10
+```
 
 A video guide on the usage can be found in [youtube](https://youtu.be/jO-1O1BJ6rE "youtube").
 
