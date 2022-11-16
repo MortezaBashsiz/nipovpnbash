@@ -33,7 +33,7 @@ function fncExitErr {
 function fncCheckSSH {
 	local ip="$1"
 	local port="$2"
-	ssh -q -o BatchMode=yes  -o StrictHostKeyChecking=no "$ip" -p "$port" 'exit 0'
+	ssh -q -o BatchMode=yes  -o StrictHostKeyChecking=no "$ip" -l root -p "$port" 'exit 0'
 	local rcode=$?
 	if [[ "$rcode" != "0" ]]; then
 		fncExitErr "SSH connectivity is not OK with user root to IP $ip and port $port"
@@ -49,7 +49,7 @@ function fncPkgInstall {
 	local pkglist="$3"
 	fncCheckSSH "$ip" "$port"
 	echo ">Installing packages $pkglist"
-	ssh -q -o BatchMode=yes  -o StrictHostKeyChecking=no "$ip" -p "$port" "export DEBIAN_FRONTEND=noninteractive ;apt-get --yes --assume-yes update; apt-get --yes --assume-yes install $pkglist"
+	ssh -q -o BatchMode=yes  -o StrictHostKeyChecking=no "$ip" -l root -p "$port" "export DEBIAN_FRONTEND=noninteractive ;apt-get --yes --assume-yes update; apt-get --yes --assume-yes install $pkglist"
 }
 # End of Function fncPkgInstall
 
@@ -60,7 +60,7 @@ function fncExecCmd {
 	local port="$2"
 	local cmd="$3"
 	fncCheckSSH "$ip" "$port"
-	result=$(ssh -q -o BatchMode=yes  -o StrictHostKeyChecking=no "$ip" -p "$port" "$cmd")
+	result=$(ssh -q -o BatchMode=yes  -o StrictHostKeyChecking=no "$ip" -l root -p "$port" "$cmd")
 	echo "$result"
 }
 # End of Function fncExecCmd
