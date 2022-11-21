@@ -39,18 +39,34 @@ fi
 fncInstallExternal
 fncSetupExternalCommon
 
-case "$_VPN_SERVICE" in
-  "shadowsocks+obfs")
-		fncSetupExternalShadowsocks		
-    ;;
-  "v2ray+vmess")
-		fncSetupExternalV2rayVmess
-    ;;
-  "v2ray+vmess+ws")
-		fncSetupExternalV2rayVmessWs
-    ;;
-  "trojan")
-		fncSetupExternalTrojan
-    ;;
-esac
+# ---------- Select service with number (There is no need to type) ------ 
+PS3="Choose Your Desired Service: "
+VPNS=("shadowsocks+obfs" "v2ray+vmess" "v2ray+vmess+ws" "trojan" "Quit")
+
+select _VPN_SERVICE in "${VPNS[@]}"
+do
+	case "$_VPN_SERVICE" in
+		"shadowsocks+obfs")
+			fncSetupExternalShadowsocks	
+			break
+      ;;
+    "v2ray+vmess")
+		  fncSetupExternalV2rayVmess
+			break
+      ;;
+    "v2ray+vmess+ws")
+	  	fncSetupExternalV2rayVmessWs
+			break
+      ;;
+    "trojan")
+	  	fncSetupExternalTrojan
+			break
+      ;;
+		"Quit")
+			exit 1
+			;;
+		*)
+			echo "Choose one of the above! $REPLY"
+  esac
+done
 
