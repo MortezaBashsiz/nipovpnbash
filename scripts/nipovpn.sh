@@ -39,11 +39,10 @@ fi
 fncInstallExternal
 fncSetupExternalCommon
 
-# ---------- Select service with number (There is no need to type) ------ 
 PS3="Choose Your Desired Service: "
-VPNS=("shadowsocks+obfs" "v2ray+vmess" "v2ray+vmess+ws" "trojan" "Quit")
+_VPN_SERVICE_LIST+=("Quit")
 
-select _VPN_SERVICE in "${VPNS[@]}"
+select _VPN_SERVICE in "${_VPN_SERVICE_LIST[@]}"
 do
 	case "$_VPN_SERVICE" in
 		"shadowsocks+obfs")
@@ -66,7 +65,8 @@ do
 			exit 1
 			;;
 		*)
-			echo "Choose one of the above! $REPLY"
+			echo "You Have To Choose One The Above!"
+			echo "You'r Choice Was: $REPLY"
   esac
 done
 

@@ -48,7 +48,7 @@ function fncPkgInstall {
 	local port="$2"
 	local pkglist="$3"
 	fncCheckSSH "$ip" "$port"
-	echo ">Installing packages $pkglist"
+	echo "> Installing packages $pkglist"
 	ssh -q -o BatchMode=yes  -o StrictHostKeyChecking=no "$ip" -l root -p "$port" "export DEBIAN_FRONTEND=noninteractive ;apt-get --yes --assume-yes update; apt-get --yes --assume-yes install $pkglist"
 }
 # End of Function fncPkgInstall
