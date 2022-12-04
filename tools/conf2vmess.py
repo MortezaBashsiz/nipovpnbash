@@ -108,14 +108,14 @@ def generate_vmess_config(ARGS, V2RAYN_TEMPLATE):
     return configOut
 
 if __name__ == '__main__':
-    data= urllib.request.urlopen('http://jsonip.com').read().decode()
-    publicIP = json.loads(data)['ip']
+    #data= urllib.request.urlopen('http://jsonip.com').read().decode()
+    #publicIP = json.loads(data)['ip']
 
     parser = argparse.ArgumentParser(description="""Script to generate v2rayN format configuration file based on
     https://github.com/2dust/v2rayN/wiki/%E5%88%86%E4%BA%AB%E9%93%BE%E6%8E%A5%E6%A0%BC%E5%BC%8F%E8%AF%B4%E6%98%8E(ver-2)""")
 
     parser.add_argument('-c', '--config', default='config.json', help='path of configuration file for v2ray server (default: %(default)s)')
-    parser.add_argument('-s', '--server', default=publicIP, help='domain or IP address of v2ray server (default: IP of current host %(default)s)')
+    parser.add_argument('-s', '--server', default='', help='domain or IP address of v2ray server (default: IP of current host %(default)s)')
     parser.add_argument('-p', '--port', nargs='+', type=int, default=[80], help='ports that v2ray server listens to (default: the ones defined in configuration file)')
     parser.add_argument('-o', '--output', default='STDOUT', help='name of v2rayN format configuration file (default: %(default)s)')
     parser.add_argument('-a', '--append', action='store_true', help='append to output file (default: False)')

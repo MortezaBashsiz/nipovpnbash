@@ -56,36 +56,35 @@ total 36
 ```bash
 [~/data/git/MortezaBashsiz/nipovpn/scripts]>$ bash nipovpn.sh 
 
->Welcome to nipovpn 
->Please answer to the following questions 
->This script by default uses for setting up internal and external servers 
->How do you want to use this script? 
->Please choose from following or leave empty and push enter button for continue 
->> external
->> both
-both
->Please answer to the following questions 
->Internal server IP address IP.IP.IP.IP
+> Welcome to nipovpn 
+> Please answer to the following questions 
+> This script by default uses for setting up internal and external servers 
+> How do you want to use this script? 
+> Please choose from following or leave empty and push enter button for continue 
+>> 1) both
+>> 2) external
+1
+> Please answer to the following questions 
+> Internal server IP address IP.IP.IP.IP
 65.21.189.183
->SSH port for internal server 65.21.189.183 (default 22)
+> SSH port for internal server 65.21.189.183 (default 22)
 22
->Internal server port (default 443)
+> Internal server port (default 443)
 445
->External server IP address IP.IP.IP.IP
+> External server IP address IP.IP.IP.IP
 65.108.221.16
->SSH port for external server 65.108.221.16 (default 22)
+> SSH port for external server 65.108.221.16 (default 22)
 22
->External server port (default 443)
+> External server port (default 443)
 445
->What kind of service would you like to use?
->These are the type of services which is supported by this script
->> shadowsocks+obfs
->> v2ray+vmess
->> v2ray+vmess+ws
->> trojan
->What kind of service would you like to use?(choose from list above)
-v2ray+vmess
->Installing packages htop net-tools iptables-persistent vim fail2ban
+> What kind of service would you like to use?
+> These are the type of services which is supported by this script (ENTER THE NUMBER)
+1) shadowsocks+obfs
+2) v2ray+vmess
+3) v2ray+vmess+ws
+4) trojan
+#?
+> Installing packages htop net-tools iptables-persistent vim fail2ban
 Get:1 http://security.debian.org/debian-security bullseye-security InRelease [48.4 kB]
 Get:2 http://deb.debian.org/debian bullseye InRelease [116 kB]
 Get:3 http://deb.debian.org/debian bullseye-updates InRelease [44.1 kB]
