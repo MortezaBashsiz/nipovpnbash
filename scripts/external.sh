@@ -64,8 +64,8 @@ function fncSetupExternalShadowsocks {
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "mv /root/external_shadowsocks /etc/shadowsocks-libev/config.json"
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "systemctl restart shadowsocks-libev.service; systemctl enable shadowsocks-libev.service;"
 	echo ""
-	echo ">External Host is configured"
-	echo ">use the following configuration for your android client"
+	echo "> External Host is configured"
+	echo "> use the following configuration for your android client"
 	echo "
 		server: $tempHost
 		server_port: $tempPort
@@ -97,7 +97,7 @@ function fncSetupExternalV2rayVmess {
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "python3 /opt/tools/vmess2sub.py /opt/tools/output-vmess.json /opt/tools/output-vmess_v2rayN.html -l /opt/tools/output-vmess_v2rayN.lnk"
 	_vmessurl=$(fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "cat /opt/tools/output-vmess_v2rayN.lnk")
 	echo ""
-	echo ">Your VMESS url is as following inport it to your client device"
+	echo "> Your VMESS url is as following inport it to your client device"
 	echo "$_vmessurl"
 }
 # End of Function fncSetupExternalV2rayVmess
@@ -127,7 +127,7 @@ function fncSetupExternalV2rayVmessWs {
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "python3 /opt/tools/vmess2sub.py /opt/tools/output-vmess.json /opt/tools/output-vmess_v2rayN.html -l /opt/tools/output-vmess_v2rayN.lnk"
 	_vmessurl=$(fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "cat /opt/tools/output-vmess_v2rayN.lnk")
 	echo ""
-	echo ">Your VMESS url is as following inport it to your client device"
+	echo "> Your VMESS url is as following inport it to your client device"
 	echo "$_vmessurl"
 }
 # End of Function fncSetupExternalV2rayVmessWs
