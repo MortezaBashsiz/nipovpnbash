@@ -22,13 +22,13 @@ set -o nounset                                  # Treat unset variables as an er
 # Function fncSetupExternalCommon
 # Setup external host 
 function fncSetupExternalCommon {
-	scp -r -P "$_EXTERNAL_SSH_PORT" ../tools "$_EXTERNAL_IP":/opt/
+	scp -r -P root@"$_EXTERNAL_SSH_PORT" ../tools "$_EXTERNAL_IP":/opt/
 	echo "${_EXTERNAL_IPTABLES_CFG}" > /tmp/external_iptables
-	scp -r -P "$_EXTERNAL_SSH_PORT" /tmp/external_iptables "$_EXTERNAL_IP":/root/
+	scp -r -P root@"$_EXTERNAL_SSH_PORT" /tmp/external_iptables "$_EXTERNAL_IP":/root/
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "mv /root/external_iptables /etc/iptables/rules.v4"
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "systemctl restart iptables.service; systemctl enable iptables.service;"
 	echo "${_FAIL2BAN_CFG}" > /tmp/external_fail2ban
-	scp -r -P "$_EXTERNAL_SSH_PORT" /tmp/external_fail2ban "$_EXTERNAL_IP":/root/
+	scp -r -P root@"$_EXTERNAL_SSH_PORT" /tmp/external_fail2ban "$_EXTERNAL_IP":/root/
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "mv /root/external_fail2ban /etc/fail2ban/jail.d/sshd.conf"
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "systemctl restart fail2ban.service; systemctl enable fail2ban.service;"
 }
@@ -39,7 +39,7 @@ function fncSetupExternalCommon {
 function fncSetupExternalV2raySystemd {
 	if [[ "$_DIST" == "UBUNTU" ]]; then
 		echo "${_V2RAY_VMESS_SYSTEMD_CFG}" > /tmp/external_v2rayvmess_systemd
-		scp -r -P "$_EXTERNAL_SSH_PORT" /tmp/external_v2rayvmess_systemd "$_EXTERNAL_IP":/root/
+		scp -r -P root@"$_EXTERNAL_SSH_PORT" /tmp/external_v2rayvmess_systemd "$_EXTERNAL_IP":/root/
 		fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "mkdir -p /etc/systemd/system/v2ray.service.d"
 		fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "mv /root/external_v2rayvmess_systemd /etc/systemd/system/v2ray.service.d/v2ray.conf"
 	fi
@@ -60,7 +60,7 @@ function fncSetupExternalShadowsocks {
 	fi
 	fncSetupExternalCommon
 	echo "${_SHADOWSOCKS_CFG}" > /tmp/external_shadowsocks
-	scp -r -P "$_EXTERNAL_SSH_PORT" /tmp/external_shadowsocks "$_EXTERNAL_IP":/root/
+	scp -r -P root@"$_EXTERNAL_SSH_PORT" /tmp/external_shadowsocks "$_EXTERNAL_IP":/root/
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "mv /root/external_shadowsocks /etc/shadowsocks-libev/config.json"
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "systemctl restart shadowsocks-libev.service; systemctl enable shadowsocks-libev.service;"
 	echo ""
@@ -90,7 +90,7 @@ function fncSetupExternalV2rayVmess {
 	fi
 	fncSetupExternalV2raySystemd
 	echo "${_V2RAY_VMESS_CFG}" > /tmp/external_v2rayvmess
-	scp -r -P "$_EXTERNAL_SSH_PORT" /tmp/external_v2rayvmess "$_EXTERNAL_IP":/root/
+	scp -r -P root@"$_EXTERNAL_SSH_PORT" /tmp/external_v2rayvmess "$_EXTERNAL_IP":/root/
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "mv /root/external_v2rayvmess /etc/v2ray/config.json"
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "systemctl daemon-reload; systemctl restart v2ray.service; systemctl enable v2ray.service;"
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "python3 /opt/tools/conf2vmess.py -c /etc/v2ray/config.json -s $tempHost -p $tempPort -o /opt/tools/output-vmess.json"
@@ -116,11 +116,11 @@ function fncSetupExternalV2rayVmessWs {
 	fi
 	fncSetupExternalV2raySystemd
 	echo "${_V2RAY_VMESS_WS_CFG}" > /tmp/external_v2rayvmessws
-	scp -r -P "$_EXTERNAL_SSH_PORT" /tmp/external_v2rayvmessws "$_EXTERNAL_IP":/root/
+	scp -r -P root@"$_EXTERNAL_SSH_PORT" /tmp/external_v2rayvmessws "$_EXTERNAL_IP":/root/
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "mv /root/external_v2rayvmessws /etc/v2ray/config.json"
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "systemctl daemon-reload; systemctl restart v2ray.service; systemctl enable v2ray.service;"
 	echo "${_V2RAY_VMESS_WS_NGINX_CFG}" > /tmp/external_v2rayvmesswsnginx
-	scp -r -P "$_EXTERNAL_SSH_PORT" /tmp/external_v2rayvmesswsnginx "$_EXTERNAL_IP":/root/
+	scp -r -P root@"$_EXTERNAL_SSH_PORT" /tmp/external_v2rayvmesswsnginx "$_EXTERNAL_IP":/root/
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "mv /root/external_v2rayvmesswsnginx /etc/nginx/conf.d/vmess.conf"
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "systemctl restart nginx.service; systemctl enable nginx.service;"
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "python3 /opt/tools/conf2vmess.py -c /etc/v2ray/config.json -s $tempHost -p $tempPort -o /opt/tools/output-vmess.json"
@@ -147,7 +147,7 @@ function fncSetupExternalTrojan {
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj \"/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.sudoer.online\" -keyout /etc/trojan/ssl.key  -out /etc/trojan/ssl.cert"
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "chmod 644 /etc/trojan/ssl.*"
 	echo "${_TROJAN_CFG}" > /tmp/external_trojan
-	scp -r -P "$_EXTERNAL_SSH_PORT" /tmp/external_trojan "$_EXTERNAL_IP":/root/
+	scp -r -P root@"$_EXTERNAL_SSH_PORT" /tmp/external_trojan "$_EXTERNAL_IP":/root/
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "mv /root/external_trojan /etc/trojan/config.json"
 	fncExecCmd "$_EXTERNAL_IP" "$_EXTERNAL_SSH_PORT" "systemctl restart trojan.service; systemctl enable trojan.service;"
 	echo "
