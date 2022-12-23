@@ -83,6 +83,12 @@ function fncArvanGetDomainStatus {
 function fncArvanCreateDomain {
 	local domainName="$1"
 	local domainInfo domainId result
+  resultPatchDomain=$(curl -s -XPATCH -H "Authorization: $_ARVAN_API_KEY" -H "Content-Type: application/json" -d "{ \"ssl_status\": true, \"tls_version\": \"\", \"hsts_status\": false, \"hsts_max_age\": \"2mo\", \"hsts_subdomain\": false, \"hsts_preload\": false, \"https_redirect\": true, \"replace_http\": true, \"certificate\": \"managed\", \"certificate_key_type\": \"ec\" }" "$cdnApiUrl"/domains/"$domainName"/ssl)
+	if [[ "$resultPatchDomain" != *"Successfully"* ]];
+	then
+		echo "false"
+		return 0
+	fi
 	currentDomains=$(fncArvanGetDomainsList)
 	# shellcheck disable=SC2068
 	for item in ${currentDomains[@]} 
@@ -195,7 +201,7 @@ function fncArvanCreateCnameRecord {
 			return 0
 		fi
 	done
-	local cnameRecordJson="{ \"type\": \"cname\", \"name\": \"gheychi$recordName\", \"value\": { \"host\": \"$recordName.$domainName.\" }, \"ttl\": 120, \"cloud\": true, \"upstream_https\": \"default\", \"ip_filter_mode\": { \"count\": \"single\", \"order\": \"none\", \"geo_filter\": \"none\" }}"
+	local cnameRecordJson="{ \"type\": \"cname\", \"name\": \"gheychi$recordName\", \"value\": { \"host\": \"$recordName.$domainName.\" }, \"ttl\": 120, \"cloud\": true, \"upstream_https\": \"https\", \"ip_filter_mode\": { \"count\": \"single\", \"order\": \"none\", \"geo_filter\": \"none\" }}"
 	resultCnameRecord=$(curl -s -XPOST -H "Authorization: $_ARVAN_API_KEY" -H "Content-Type: application/json" -d "$cnameRecordJson" "$cdnApiUrl"/domains/"$domainName"/dns-records)
 	sleep 5	
 	currentRecords=$(fncArvanGetDomainRecords "$domainName")

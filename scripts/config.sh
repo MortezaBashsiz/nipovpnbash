@@ -258,6 +258,8 @@ _ARVAN_VM_IPTABLES_CFG=$(cat << EOF
 :OUTPUT ACCEPT [0:0]
 -A INPUT -d $_ARVAN_VM_IP/32 -p udp -m udp --dport 443 -j ACCEPT
 -A INPUT -d $_ARVAN_VM_IP/32 -p tcp -m tcp --dport 443 -j ACCEPT
+-A INPUT -d $_ARVAN_VM_IP/32 -p udp -m udp --dport 80 -j ACCEPT
+-A INPUT -d $_ARVAN_VM_IP/32 -p tcp -m tcp --dport 80 -j ACCEPT
 -A INPUT -p tcp -m tcp --dport $_ARVAN_VM_SSH_PORT -j ACCEPT
 -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
 -A INPUT -i lo -j ACCEPT
