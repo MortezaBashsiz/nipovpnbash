@@ -2,6 +2,11 @@
 
 This is an easy installation script to help you config these VPN protocols on your VPS.
 
+With ArvanCloud CDN
+In this method you need to have a domain and an account in ArvanCloud
+- v2ray+vmess+ws+nginx+tls
+
+Without ArvanCloud CDN
 - shadowsocks+obfs
 - v2ray+vmess
 - v2ray+vmess+ws
@@ -13,6 +18,7 @@ This is an easy installation script to help you config these VPN protocols on yo
 2. an internal VPS (Inside Iran) This is optional and you can use it for only external
 3. Debian 11 OR Ubuntu 20.04 as the OS of both VMs
 4. Able to SSH without password to both internal and external server
+5. In case of ArvanCloud CDN, you need to have a domain and an account in ArvanCloud
 
 # How to setup ssh key on client
 
@@ -40,6 +46,7 @@ A video guide on the usage can be found in [youtube](https://youtu.be/jO-1O1BJ6r
 ```bash
 [~/data/git/MortezaBashsiz/nipovpn/scripts]>$ ls -l
 total 36
+-rw-r--r-- 1 morteza morteza 1763 Nov  1 10:56 arvan.sh
 -rw-r--r-- 1 morteza morteza 1763 Nov  1 10:56 basic.sh
 -rw-r--r-- 1 morteza morteza 1186 Oct 31 13:30 check.sh
 -rw-r--r-- 1 morteza morteza 5037 Oct 31 14:52 external.sh
@@ -58,6 +65,10 @@ total 36
 
 > Welcome to nipovpn 
 > Please answer to the following questions 
+> Would you like to use ArvanCloud as CDN ? 
+1) yes
+2) no
+#? 2
 > This script by default uses for setting up internal and external servers 
 > How do you want to use this script? 
 > Please choose from following or leave empty and push enter button for continue 
