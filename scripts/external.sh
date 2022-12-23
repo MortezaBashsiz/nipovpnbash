@@ -66,6 +66,7 @@ function fncSetupExternalShadowsocks {
 	echo ""
 	echo "> External Host is configured"
 	echo "> use the following configuration for your android client"
+	# shellcheck disable=SC2154
 	echo "
 		server: $tempHost
 		server_port: $tempPort

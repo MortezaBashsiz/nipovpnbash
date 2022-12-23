@@ -21,12 +21,18 @@ set -o nounset                                  # Treat unset variables as an er
 
 source basic.sh
 source check.sh
+source arvan.sh
 source interaction.sh
 fncGetInteraction
 source pkg.sh
 source config.sh
 source internal.sh
 source external.sh
+
+if [[ "$_ARVAN_OR_NOT" == "yes" ]]; then
+		fncArvanSetupVM
+		exit 0
+fi
 
 if [[ "$_BOTH_OR_EXTERNAL" == "external" ]]; then
 	echo ""
