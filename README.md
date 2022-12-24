@@ -41,7 +41,8 @@ Then you need to copy the generated ssh key to the destination hosts with the fo
 [~]>$ ssh-copy-id root@192.168.5.10
 ```
 
-A video guide on the usage can be found in [youtube](https://youtu.be/jO-1O1BJ6rE "youtube").
+A video guide usage can be found in [youtube](https://youtu.be/jO-1O1BJ6rE "youtube").
+A video guide usage For Arvan CDN can be found in [youtube](https://youtu.be/_OiNxRbjdpg "youtube").
 
 # How to Run
 1. Download or clone the project
@@ -104,6 +105,4 @@ Get:1 http://security.debian.org/debian-security bullseye-security InRelease [48
 Get:2 http://deb.debian.org/debian bullseye InRelease [116 kB]
 Get:3 http://deb.debian.org/debian bullseye-updates InRelease [44.1 kB]
 ```
-
-Video link in [youtube](https://youtu.be/jO-1O1BJ6rE "youtube") 
 
