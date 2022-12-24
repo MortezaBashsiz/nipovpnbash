@@ -19,6 +19,10 @@ Without ArvanCloud CDN
 3. Debian 11 OR Ubuntu 20.04 as the OS of both VMs
 4. Able to SSH without password to both internal and external server
 5. In case of ArvanCloud CDN, you need to have a domain and an account in ArvanCloud
+6. Do not forget to install jq where you are executing this script like
+```bash
+ [~]>$ sudo apt install jq
+```
 
 # How to setup ssh key on client
 
