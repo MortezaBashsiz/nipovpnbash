@@ -83,18 +83,13 @@ function fncArvanGetDomainStatus {
 function fncArvanCreateDomain {
 	local domainName="$1"
 	local domainInfo domainId result
-  resultPatchDomain=$(curl -s -XPATCH -H "Authorization: $_ARVAN_API_KEY" -H "Content-Type: application/json" -d "{ \"ssl_status\": true, \"tls_version\": \"\", \"hsts_status\": false, \"hsts_max_age\": \"2mo\", \"hsts_subdomain\": false, \"hsts_preload\": false, \"https_redirect\": true, \"replace_http\": true, \"certificate\": \"managed\", \"certificate_key_type\": \"ec\" }" "$cdnApiUrl"/domains/"$domainName"/ssl)
-	if [[ "$resultPatchDomain" != *"Successfully"* ]];
-	then
-		echo "false"
-		return 0
-	fi
 	currentDomains=$(fncArvanGetDomainsList)
 	# shellcheck disable=SC2068
 	for item in ${currentDomains[@]} 
 	do
 		if [[ "$item" == "\"$domainName\"" ]];
 		then
+			resultPatchDomain=$(curl -s -XPATCH -H "Authorization: $_ARVAN_API_KEY" -H "Content-Type: application/json" -d "{ \"ssl_status\": true, \"tls_version\": \"\", \"hsts_status\": false, \"hsts_max_age\": \"2mo\", \"hsts_subdomain\": false, \"hsts_preload\": false, \"https_redirect\": true, \"replace_http\": true, \"certificate\": \"managed\", \"certificate_key_type\": \"ec\" }" "$cdnApiUrl"/domains/"$domainName"/ssl)
 			echo "true"
 			return 0
 		fi
@@ -108,6 +103,7 @@ function fncArvanCreateDomain {
 	do
 		if [[ "$item" == "\"$domainName\"" ]];
 		then
+			resultPatchDomain=$(curl -s -XPATCH -H "Authorization: $_ARVAN_API_KEY" -H "Content-Type: application/json" -d "{ \"ssl_status\": true, \"tls_version\": \"\", \"hsts_status\": false, \"hsts_max_age\": \"2mo\", \"hsts_subdomain\": false, \"hsts_preload\": false, \"https_redirect\": true, \"replace_http\": true, \"certificate\": \"managed\", \"certificate_key_type\": \"ec\" }" "$cdnApiUrl"/domains/"$domainName"/ssl)
 			echo "true"
 			return 0
 		fi
